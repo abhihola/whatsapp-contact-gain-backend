@@ -14,7 +14,7 @@ const generateVCF = async () => {
     fs.writeFileSync(filePath, vcfContent);
     return filePath;
   } catch (error) {
-    console.error('❌ Error generating VCF:', error);
+    console.error('Error generating VCF:', error);
     return null;
   }
 };
