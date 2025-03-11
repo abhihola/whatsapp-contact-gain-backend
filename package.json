@@ -13,6 +13,12 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "nodemailer": "^6.9.1",
-    "node-cron": "^3.0.0"
+    "node-cron": "^3.0.0",
+    "json2csv": "^6.0.0",
+    "i18next": "^23.6.0",
+    "i18next-http-middleware": "^3.2.1",
+    "i18next-fs-backend": "^1.2.0",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.0"
   }
 }
