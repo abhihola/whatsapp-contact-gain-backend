@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const AdminSettings = require('../models/AdminSettings');
 
+// Update default message
 router.post('/update-message', async (req, res) => {
   try {
     const { defaultMessage } = req.body;
