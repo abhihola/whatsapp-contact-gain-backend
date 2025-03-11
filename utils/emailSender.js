@@ -2,6 +2,7 @@ const nodemailer = require('nodemailer');
 const User = require('../models/User');
 const AdminSettings = require('../models/AdminSettings');
 const { generateVCF } = require('./vcfGenerator');
+const { getTranslation } = require('./translations');
 
 const sendDailyEmails = async () => {
   try {
@@ -20,19 +21,23 @@ const sendDailyEmails = async () => {
     });
 
     for (const user of users) {
+      const lang = user.language || 'en';
+      const subject = getTranslation(lang, 'subject');
+      const body = getTranslation(lang, 'body');
+
       const mailOptions = {
         from: process.env.EMAIL_USER,
         to: user.email,
-        subject: '📩 Daily Updated Contacts',
-        text: settings?.defaultMessage || 'Here is your updated contact list.',
+        subject: subject,
+        text: body,
         attachments: [{ filename: 'contacts.vcf', path: vcfFilePath }]
       };
 
       await transporter.sendMail(mailOptions);
     }
-    console.log('✅ Daily emails sent successfully');
+    console.log('Daily emails sent successfully in multiple languages');
   } catch (error) {
-    console.error('❌ Error sending emails:', error);
+    console.error('Error sending emails:', error);
   }
 };
 
