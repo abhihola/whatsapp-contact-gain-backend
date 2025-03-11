@@ -1,21 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');
-const { Parser } = require('json2csv');
+const AdminSettings = require('../models/AdminSettings');
 
-router.get('/export-users', async (req, res) => {
+// ✅ Update default message for VCF email
+router.post('/update-message', async (req, res) => {
   try {
-    const users = await User.find();
-    if (!users.length) return res.status(404).json({ error: 'No users found' });
-
-    const parser = new Parser({ fields: ['name', 'whatsappNumber', 'email'] });
-    const csv = parser.parse(users);
-
-    res.setHeader('Content-Type', 'text/csv');
-    res.setHeader('Content-Disposition', 'attachment; filename=users.csv');
-    res.send(csv);
+    const { defaultMessage } = req.body;
+    let settings = await AdminSettings.findOne();
+    if (!settings) {
+      settings = new AdminSettings({ defaultMessage });
+    } else {
+      settings.defaultMessage = defaultMessage;
+    }
+    await settings.save();
+    res.json({ message: 'Message updated successfully' });
   } catch (error) {
-    res.status(500).json({ error: 'Error exporting users' });
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
