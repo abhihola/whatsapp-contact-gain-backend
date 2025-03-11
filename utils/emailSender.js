@@ -2,7 +2,6 @@ const nodemailer = require('nodemailer');
 const User = require('../models/User');
 const AdminSettings = require('../models/AdminSettings');
 const { generateVCF } = require('./vcfGenerator');
-const fs = require('fs');
 
 const sendDailyEmails = async () => {
   try {
