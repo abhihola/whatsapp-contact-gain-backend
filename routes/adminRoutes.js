@@ -1,31 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const AdminSettings = require('../models/AdminSettings');
+const User = require('../models/User');
+const { Parser } = require('json2csv');
 
-// Get current settings
-router.get('/settings', async (req, res) => {
+router.get('/export-users', async (req, res) => {
   try {
-    const settings = await AdminSettings.findOne();
-    res.json(settings);
-  } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
+    const users = await User.find();
+    if (!users.length) return res.status(404).json({ error: 'No users found' });
 
-// Update default message
-router.post('/update-message', async (req, res) => {
-  try {
-    const { defaultMessage } = req.body;
-    let settings = await AdminSettings.findOne();
-    if (!settings) {
-      settings = new AdminSettings({ defaultMessage });
-    } else {
-      settings.defaultMessage = defaultMessage;
-    }
-    await settings.save();
-    res.json({ message: 'Message updated successfully' });
+    const parser = new Parser({ fields: ['name', 'whatsappNumber', 'email'] });
+    const csv = parser.parse(users);
+
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', 'attachment; filename=users.csv');
+    res.send(csv);
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: 'Error exporting users' });
   }
 });
 
