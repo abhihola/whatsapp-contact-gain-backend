@@ -1,3 +1,4 @@
+// server.js - Main backend setup
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -5,7 +6,7 @@ const cron = require('node-cron');
 require('dotenv').config();
 
 const userRoutes = require('./routes/userRoutes');
-const adminRoutes = require('./routes/adminRoutes');
+const adminRoutes = require('./routes/adminRoutes'); // Ensure this line is included
 const { sendDailyEmails } = require('./utils/emailSender');
 
 const app = express();
@@ -22,7 +23,7 @@ mongoose.connect(process.env.MONGO_URI, {
 
 // Routes
 app.use('/api/users', userRoutes);
-app.use('/api/admin', adminRoutes);
+app.use('/api/admin', adminRoutes); // Ensure this route is correctly included
 
 // Schedule daily email sending
 cron.schedule('0 8 * * *', async () => {
