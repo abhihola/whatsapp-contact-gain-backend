@@ -9,6 +9,7 @@ const middleware = require('i18next-http-middleware');
 
 const userRoutes = require('./routes/userRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const referralRoutes = require('./routes/referralRoutes'); // Added referral routes
 const { sendDailyEmails } = require('./utils/emailSender');
 
 const app = express();
@@ -29,24 +30,25 @@ mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => console.log('MongoDB connected'))
-.catch(err => console.error('MongoDB connection error:', err));
+.then(() => console.log('✅ MongoDB connected'))
+.catch(err => console.error('❌ MongoDB connection error:', err));
 
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/referrers', referralRoutes); // New referral system route
 
 app.get('/', (req, res) => {
-  res.send('Welcome to WhatsApp Contact Gain API');
+  res.send('✅ WhatsApp Contact Gain API is running!');
 });
 
 // Schedule daily email sending
 cron.schedule('0 8 * * *', async () => {
-  console.log('Sending daily VCF emails...');
+  console.log('📨 Sending daily VCF emails...');
   await sendDailyEmails();
 }, {
   timezone: "UTC"
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
