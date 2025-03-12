@@ -9,7 +9,7 @@ const middleware = require('i18next-http-middleware');
 
 const userRoutes = require('./routes/userRoutes');
 const adminRoutes = require('./routes/adminRoutes');
-const referralRoutes = require('./routes/referralRoutes'); // Added referral routes
+const referralRoutes = require('./routes/referralRoutes'); // Fixed referral routes
 const { sendDailyEmails } = require('./utils/emailSender');
 
 const app = express();
@@ -36,7 +36,7 @@ mongoose.connect(process.env.MONGO_URI, {
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/admin', adminRoutes);
-app.use('/api/referrers', referralRoutes); // New referral system route
+app.use('/api/referrals', referralRoutes); // Fixed route name
 
 app.get('/', (req, res) => {
   res.send('✅ WhatsApp Contact Gain API is running!');
