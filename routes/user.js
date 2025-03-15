@@ -1,22 +1,14 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  whatsappNumber: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  referrals: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Store referred users
-  referralCode: { type: String, unique: true }, // Unique referral code
-  referredBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null }, // Who referred this user
-  createdAt: { type: Date, default: Date.now }
-});
+const UserSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    verified: { type: Boolean, default: false },
+    referralCode: { type: String, unique: true },
+    referredBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    referralCount: { type: Number, default: 0 },
+    isPremium: { type: Boolean, default: false },
+}, { timestamps: true });
 
-// Generate a referral code before saving the user
-userSchema.pre('save', function (next) {
-  if (!this.referralCode) {
-    this.referralCode = Math.random().toString(36).substr(2, 8).toUpperCase();
-  }
-  next();
-});
-
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model("User", UserSchema);
