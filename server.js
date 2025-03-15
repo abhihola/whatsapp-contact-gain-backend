@@ -2,7 +2,6 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const bodyParser = require("express.json");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const referralRoutes = require("./routes/referralRoutes");
@@ -13,7 +12,7 @@ const app = express();
 
 // Middleware
 app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
-app.use(bodyParser());
+app.use(express.json()); // Correct usage of express.json()
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
